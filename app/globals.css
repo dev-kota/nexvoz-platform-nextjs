@@ -76,3 +76,34 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Global scrollbar styles */
+::-webkit-scrollbar {
+    width: 8px; /* Make the scrollbar narrow */
+}
+
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-track-color, #f1f1f1); /* Light theme track color */
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track-color, #1a1a1a); /* Dark theme track color */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-color, #888); /* Light theme thumb color */
+    border-radius: 10px; /* Rounded corners */
+    border: 2px solid var(--scrollbar-thumb-border-color, transparent); /* Optional border */
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-color, #444); /* Dark theme thumb color */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover-color, #555); /* Light theme hover color */
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover-color, #666); /* Dark theme hover color */
+}

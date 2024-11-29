@@ -7,7 +7,7 @@ import { ArrowRight } from "lucide-react";
 const heroContent = {
     title: "Enterprise-Grade AI Agents",
     description: "Handle 1000+ concurrent calls with our scalable AI agents. Perfect for high-volume customer service operations. Our AI agents are designed to handle complex inquiries, provide consistent responses, and learn from each interaction to continuously improve performance. Ideal for call centers, customer support teams, and any business looking to enhance their customer communication at scale.",
-    image: "/images/call-center.jpg" 
+    image: "/images/call-center.jpg"
 };
 
 export default function HeroSection() {
@@ -18,7 +18,7 @@ export default function HeroSection() {
                     src={heroContent.image}
                     alt="Call center background"
                     fill
-                    style={{objectFit: 'cover'}}
+                    style={{ objectFit: 'cover' }}
                     priority
                 />
                 <div className="absolute inset-0 bg-background/75 dark:bg-background/90" />
@@ -28,7 +28,7 @@ export default function HeroSection() {
                     <h1 className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent animate-gradient">
                         Nexvoz: AI Voice Agents for Modern Business
                     </h1>
-                    
+
                     <div className="max-w-2xl mt-8">
                         <h2 className="text-2xl font-bold mb-4">{heroContent.title}</h2>
                         <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
