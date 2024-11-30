@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { useState, useEffect } from 'react';
-import { Globe } from "lucide-react";
 
 export default function AboutLanguages() {
     const [languageCount, setLanguageCount] = useState(0);
@@ -66,7 +65,6 @@ export default function AboutLanguages() {
             <div className="container relative z-10">
                 <div className="text-center mb-12">
                     <div className="flex justify-center items-center mb-4">
-                        <Globe className="w-8 h-8 mr-2 text-primary" />
                         <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
                             Global Language Support
                         </h2>

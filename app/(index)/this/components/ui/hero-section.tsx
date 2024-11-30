@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useRouter } from 'next/navigation';
 
 const heroContent = {
     title: "Enterprise-Grade AI Agents",
@@ -11,6 +12,9 @@ const heroContent = {
 };
 
 export default function HeroSection() {
+    const router = useRouter();
+    const handleGetStarted = () => router.push('/sign-in');
+    
     return (
         <section className="relative py-24 overflow-hidden">
             <div className="absolute inset-0">
@@ -36,7 +40,13 @@ export default function HeroSection() {
                         </p>
                     </div>
 
-                    <Button size="lg" className="mt-8">Get Started Today <ArrowRight className="ml-1 h-4 w-4" /></Button>
+                    <Button 
+                        size="lg" 
+                        className="mt-8"
+                        onClick={handleGetStarted}
+                    >
+                        Get Started Today <ArrowRight className="ml-1 h-4 w-4" />
+                    </Button>
                 </div>
             </div>
         </section>

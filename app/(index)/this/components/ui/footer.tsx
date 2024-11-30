@@ -1,4 +1,5 @@
 import { Twitter, Facebook, Linkedin, Youtube, Info, Mail, Briefcase, FileText, Shield, Cookie, Phone, MapPin } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Footer() {
     const footerSections = [
@@ -43,7 +44,22 @@ export default function Footer() {
             <div className="container py-12">
                 <div className="flex flex-col md:flex-row justify-between items-start mb-8">
                     <div className="mb-8 md:mb-0">
-                        <h1 className="font-bold text-2xl mb-4">Nexvoz Logo</h1>
+                        <div className="mb-4">
+                            <Image
+                                src="/images/nexvoz-blue.svg"
+                                alt="Nexvoz Logo"
+                                width={120}
+                                height={40}
+                                className="dark:hidden"
+                            />
+                            <Image
+                                src="/images/nexvoz-white.svg"
+                                alt="Nexvoz Logo"
+                                width={120}
+                                height={40}
+                                className="hidden dark:block"
+                            />
+                        </div>
                         <ul className="space-y-3">
                             {contactInfo.map((item, index) => (
                                 <li key={index} className="flex items-center text-sm text-muted-foreground">
