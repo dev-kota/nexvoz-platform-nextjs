@@ -1,4 +1,5 @@
-import { Twitter, Github, Linkedin, Info, Mail, Briefcase, FileText, Shield, Cookie } from 'lucide-react';
+import { Twitter, Facebook, Linkedin, Youtube, Info, Mail, Briefcase, FileText, Shield, Cookie, Phone, MapPin } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Footer() {
     const footerSections = [
@@ -21,11 +22,19 @@ export default function Footer() {
         {
             title: "Connect",
             links: [
-                { text: "Twitter", href: "#", icon: Twitter },
-                { text: "GitHub", href: "#", icon: Github },
-                { text: "LinkedIn", href: "#", icon: Linkedin },
+                { text: "Facebook", href: "https://www.facebook.com/", icon: Facebook },
+                { text: "Twitter", href: "https://twitter.com/", icon: Twitter },
+                { text: "LinkedIn", href: "https://www.linkedin.com/", icon: Linkedin },
+                { text: "YouTube", href: "https://www.youtube.com/", icon: Youtube },
             ]
         }
+    ];
+
+    const contactInfo = [
+        { icon: Phone, text: "+1 309-621-6036" },
+        { icon: Mail, text: "info@nexvoz.com" },
+        { icon: MapPin, text: "USA: 8635 W Sahara Ave Las Vegas, NV 89117-5858" },
+        { icon: MapPin, text: "Brazil: RUA SÃO GABRIEL 555 SALA 43, JARDIM PAULISTA, SP" },
     ];
 
     const LAUNCHED_YEAR = 2023; // Replace with your actual launch year
@@ -35,7 +44,30 @@ export default function Footer() {
             <div className="container py-12">
                 <div className="flex flex-col md:flex-row justify-between items-start mb-8">
                     <div className="mb-8 md:mb-0">
-                        <h1 className="font-bold text-2xl mb-4">Nexvoz Logo</h1>
+                        <div className="mb-4">
+                            <Image
+                                src="/images/nexvoz-blue.svg"
+                                alt="Nexvoz Logo"
+                                width={120}
+                                height={40}
+                                className="dark:hidden"
+                            />
+                            <Image
+                                src="/images/nexvoz-white.svg"
+                                alt="Nexvoz Logo"
+                                width={120}
+                                height={40}
+                                className="hidden dark:block"
+                            />
+                        </div>
+                        <ul className="space-y-3">
+                            {contactInfo.map((item, index) => (
+                                <li key={index} className="flex items-center text-sm text-muted-foreground">
+                                    <item.icon className="mr-2 h-4 w-4" />
+                                    <span>{item.text}</span>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {footerSections.map((section, index) => (
@@ -44,8 +76,8 @@ export default function Footer() {
                                 <ul className="space-y-3">
                                     {section.links.map((link, linkIndex) => (
                                         <li key={linkIndex}>
-                                            <a 
-                                                href={link.href} 
+                                            <a
+                                                href={link.href}
                                                 className="text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center"
                                             >
                                                 {link.icon && <link.icon className="mr-2 h-4 w-4" />}
