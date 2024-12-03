@@ -16,20 +16,27 @@ import { Input } from "@/components/ui/input";
 import * as z from "zod";
 import { User, Mail, Phone, Lock, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
+// Moved schema outside component to avoid recreation
 const formSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
     email: z.string().email("Invalid email address"),
     phone: z.string()
         .min(10, "Phone number must be at least 10 digits")
         .regex(/^[0-9]+$/, "Phone number can only contain digits")
-        .transform((val) => val.replace(/\D/g, "")), // Remove non-digits
+        .transform((val) => val.replace(/\D/g, "")),
     password: z.string().min(8, "Password must be at least 8 characters"),
 });
+
+console.log(process.env.NODE_ENV);
 
 export default function UserInfoRegistration() {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const { toast } = useToast();
+    
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -40,11 +47,47 @@ export default function UserInfoRegistration() {
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Here you would typically send the data to your backend
-        console.log(values);
-        // Navigate to code verification page
-        router.push("/sign-up/code-verification");
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        if (loading) return;
+
+        try {
+            setLoading(true);
+            
+            const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                toast({
+                    variant: "destructive",
+                    title: "Registration failed",
+                    description: data.message || "Something went wrong. Please try again.",
+                });
+                return;
+            }
+
+            toast({
+                title: "Success!",
+                description: "Registration successful. Please verify your email.",
+            });
+            
+            router.push("/sign-up/code-verification");
+        } catch (err) {
+            console.error(err);
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "An unexpected error occurred. Please try again.",
+            });
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -149,8 +192,8 @@ export default function UserInfoRegistration() {
                             )}
                         />
 
-                        <Button type="submit" className="w-full">
-                            Continue
+                        <Button type="submit" className="w-full" disabled={loading}>
+                            {loading ? "Loading..." : "Continue"}
                         </Button>
                     </form>
                 </Form>
