@@ -25,10 +25,7 @@ export default function SignUpLayout({
                 />
                 <div className="absolute inset-0" />
             </div>
-
-            
-                {children}
-            
+            {children}
         </div>
     )
 }

@@ -17,6 +17,7 @@ import * as z from "zod";
 import { User, Mail, Phone, Lock, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { regist_user_info } from "../../this/api";
 
 // Moved schema outside component to avoid recreation
 const formSchema = z.object({
@@ -28,8 +29,6 @@ const formSchema = z.object({
         .transform((val) => val.replace(/\D/g, "")),
     password: z.string().min(8, "Password must be at least 8 characters"),
 });
-
-console.log(process.env.NODE_ENV);
 
 export default function UserInfoRegistration() {
     const router = useRouter();
@@ -53,21 +52,13 @@ export default function UserInfoRegistration() {
         try {
             setLoading(true);
             
-            const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/auth/register`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(values)
-            });
+            const response = await regist_user_info(values);
 
-            const data = await response.json();
-
-            if (!response.ok) {
+            if (response.status !== 200) {
                 toast({
                     variant: "destructive",
                     title: "Registration failed",
-                    description: data.message || "Something went wrong. Please try again.",
+                    description: response.message || "Something went wrong. Please try again.",
                 });
                 return;
             }
@@ -77,7 +68,7 @@ export default function UserInfoRegistration() {
                 description: "Registration successful. Please verify your email.",
             });
             
-            router.push("/sign-up/code-verification");
+            router.push("/auth/code-verification");
         } catch (err) {
             console.error(err);
             toast({

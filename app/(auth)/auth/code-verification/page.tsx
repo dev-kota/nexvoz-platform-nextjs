@@ -3,11 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { authChange } from "@/app/this/store/actions/auth";
 import { useDispatch } from "react-redux";
+import { verify_code } from "../../this/api";
 
 export default function CodeVerification() {
     const router = useRouter();
@@ -51,25 +52,46 @@ export default function CodeVerification() {
     };
 
     useEffect(() => {
-        const fullCode = codes.join("");
-        if (fullCode.length === 6) {
-            setIsVerifying(true);
-            
-            fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/auth/verify/${fullCode}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })  
-            .then(async (response) => {
-                const data = await response.json();
-                
-                if (!response.ok) {
+        const verifyCode = async () => {
+            const fullCode = codes.join("");
+            if (fullCode.length === 6) {
+                setIsVerifying(true);
+                try {
+                    const response = await verify_code(fullCode);
+
+                    if (response.status !== 200) {
+                        setVerificationResult("error");
+                        toast({
+                            variant: "destructive",
+                            title: "Verification failed", 
+                            description: response.message || "Invalid verification code"
+                        });
+                        setTimeout(() => {
+                            setIsVerifying(false);
+                            setVerificationResult(null);
+                            setCodes(["", "", "", "", "", ""]);
+                            inputRefs.current[0]?.focus();
+                        }, 2000);
+                        return;
+                    }
+
+                    setVerificationResult("success");
+                    toast({
+                        title: "Success!",
+                        description: "Email verification successful"
+                    });
+                    dispatch(authChange(response.data.token));
+                    setTimeout(() => {
+                        router.push("/auth/company-info");
+                    }, 1000);
+
+                } catch (error) {
+                    console.error(error);
                     setVerificationResult("error");
                     toast({
                         variant: "destructive",
-                        title: "Verification failed",
-                        description: data.message || "Invalid verification code"
+                        title: "Error",
+                        description: "An unexpected error occurred. Please try again."
                     });
                     setTimeout(() => {
                         setIsVerifying(false);
@@ -77,36 +99,12 @@ export default function CodeVerification() {
                         setCodes(["", "", "", "", "", ""]);
                         inputRefs.current[0]?.focus();
                     }, 2000);
-                    return;
                 }
+            }
+        };
 
-                setVerificationResult("success");
-                toast({
-                    title: "Success!",
-                    description: "Email verification successful"
-                });
-                dispatch(authChange(data.data.token));
-                setTimeout(() => {
-                    router.push("/sign-up/company-info");
-                }, 1000);
-            })
-            .catch((error) => {
-                console.error(error);
-                setVerificationResult("error");
-                toast({
-                    variant: "destructive",
-                    title: "Error",
-                    description: "An unexpected error occurred. Please try again."
-                });
-                setTimeout(() => {
-                    setIsVerifying(false);
-                    setVerificationResult(null);
-                    setCodes(["", "", "", "", "", ""]);
-                    inputRefs.current[0]?.focus();
-                }, 2000);
-            });
-        }
-    }, [codes, router, toast]);
+        verifyCode();
+    }, [codes, router, toast, dispatch]);
 
     return (
         <div className="relative z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-8 py-8 rounded-lg shadow-lg border w-full max-w-[95%] sm:max-w-md">
@@ -136,12 +134,17 @@ export default function CodeVerification() {
                 </div>
 
                 <Dialog open={isVerifying} modal>
-                    <DialogContent className="sm:max-w-md">
+                    <DialogContent className="sm:max-w-md" aria-describedby="dialog-description">
                         <DialogTitle className="sr-only">
                             {!verificationResult && "Verifying Code"}
                             {verificationResult === "success" && "Verification Successful"}
                             {verificationResult === "error" && "Verification Failed"}
                         </DialogTitle>
+                        <DialogDescription id="dialog-description" className="sr-only">
+                            {!verificationResult && "Dialog showing verification in progress"}
+                            {verificationResult === "success" && "Dialog showing successful verification"}
+                            {verificationResult === "error" && "Dialog showing verification error"}
+                        </DialogDescription>
                         <div className="flex flex-col items-center justify-center p-6">
                             {!verificationResult && (
                                 <>
