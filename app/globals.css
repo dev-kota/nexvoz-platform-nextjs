@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Onest", Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {
@@ -79,7 +79,8 @@ body {
 
 /* Global scrollbar styles */
 ::-webkit-scrollbar {
-    width: 8px; /* Make the scrollbar narrow */
+    width: 4px; /* Make the scrollbar narrower */
+    height: 4px; /* Make horizontal scrollbar narrower */
 }
 
 ::-webkit-scrollbar-track {
@@ -93,7 +94,7 @@ body {
 ::-webkit-scrollbar-thumb {
     background-color: var(--scrollbar-thumb-color, #888); /* Light theme thumb color */
     border-radius: 10px; /* Rounded corners */
-    border: 2px solid var(--scrollbar-thumb-border-color, transparent); /* Optional border */
+    border: 2px solid var(--scrollbar-thumb-border-color, transparent); /* Thinner border */
 }
 
 .dark ::-webkit-scrollbar-thumb {

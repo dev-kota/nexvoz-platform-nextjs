@@ -13,3 +13,13 @@ export const authChange = (token: string) => {
         }
     }
 }
+
+
+export const COMPANY_CHANGE = "COMPANY_CHANGE";
+
+export const companyChange = (companyId: string) => {
+    return {
+        type: COMPANY_CHANGE,
+        payload: companyId
+    }
+}
