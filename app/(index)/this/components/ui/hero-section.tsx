@@ -13,7 +13,7 @@ const heroContent = {
 
 export default function HeroSection() {
     const router = useRouter();
-    const handleGetStarted = () => router.push('/sign-in');
+    const handleGetStarted = () => router.push('/auth/sign-in');
     
     return (
         <section className="relative py-24 overflow-hidden">
