@@ -1,3 +1,9 @@
+export type Response = {
+    status: number;
+    message: string;
+    data: any;
+}
+
 export type Agent = {
     id: number;
     name: string;
@@ -18,10 +24,34 @@ export type AgentType =
   | 'Institutional'
   | 'Real Estate'
   | 'Feedback Collection'
-  | 'Custom';
+  | 'Custom'
 
-export type Response = {
-    status: number;
-    message: string;
-    data: any;
+export type Lead = {
+    id: string;
+    groupId: string;
+    name: string;
+    phone: string;
+    email: string;
+    status: LeadStatus;
+    metadata: any;
 }
+
+export type LeadGroup = {
+    id: string;
+    name: string;
+    description: string;
+}
+
+export type LeadStatus =
+  | 'Marketing Qualified Lead (MQL)'
+  | 'Sales Qualified Lead (SQL)'
+  | 'Product Qualified Lead (PQL)'
+  | 'Service Qualified Lead'
+  | 'Cold Lead'
+  | 'Warm Lead'
+  | 'Hot Lead'
+  | 'Referral Lead'
+  | 'Inbound Lead'
+  | 'Outbound Lead'
+  | 'Churned Lead'
+

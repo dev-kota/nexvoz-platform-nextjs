@@ -51,11 +51,11 @@ import { usePathname } from "next/navigation";
 
 const getMenuItems = (companyId: string) => [
     { href: `/${companyId}`, icon: LayoutDashboard, label: "Dashboard" },
-    { href: `/${companyId}/agent-list`, icon: UserSearch, label: "Agent List" },
-    { href: `/${companyId}/knowledge`, icon: DatabaseZap, label: "Knowledge" },
-    { href: `/${companyId}/lead-data`, icon: NotebookTabs, label: "Lead Data" },
-    { href: `/${companyId}/campaign`, icon: CalendarSync, label: "Campaign" },
-    { href: `/${companyId}/call-log`, icon: PhoneCall, label: "Call Log" },
+    { href: `/${companyId}/agents`, icon: UserSearch, label: "Agent List" },
+    { href: `/${companyId}/knowledges`, icon: DatabaseZap, label: "Knowledge" },
+    { href: `/${companyId}/leads`, icon: NotebookTabs, label: "Lead Data" },
+    { href: `/${companyId}/campaigns`, icon: CalendarSync, label: "Campaign" },
+    { href: `/${companyId}/calls`, icon: PhoneCall, label: "Call Log" },
     null, // separator
     { href: `/${companyId}/team`, icon: Users, label: "Team" },
     { href: `/${companyId}/subscription`, icon: CreditCard, label: "Subscription" },
@@ -230,7 +230,7 @@ export default function Sidebar() {
             {/* Collapse Button */}
             <button
                 onClick={toggleCollapse}
-                className="h-8 w-8 flex items-center justify-center border-2 border-muted-foreground text-muted-foreground rounded-full hover:bg-primary/10 absolute -right-4 top-1/2 transform -translate-y-1/2"
+                className="z-100 h-8 w-8 flex items-center justify-center border-2 border-muted-foreground text-muted-foreground rounded-full hover:bg-primary/10 absolute -right-4 top-1/2 transform -translate-y-1/2"
             >
                 <ChevronLeft className={cn(
                     "h-4 w-4 transition-transform",

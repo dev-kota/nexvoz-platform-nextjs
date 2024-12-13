@@ -8,7 +8,7 @@ export default function AgentCard({
   handleClickAgent,
   handleOpenDialer,
 }: {
-  agent: any;
+  agent: Agent;
   handleClickAgent: () => void;
   handleOpenDialer: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
