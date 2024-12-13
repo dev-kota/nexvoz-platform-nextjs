@@ -14,7 +14,9 @@ export default function LeadGroupListSheet({ open, onOpenChange }: LeadGroupList
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                 <SheetTitle>Lead Groups</SheetTitle>
                 <SheetDescription>View and manage your lead groups</SheetDescription>
-                <LeadGroupList />
+                <div className="pt-6">
+                    <LeadGroupList />
+                </div>
             </SheetContent>
         </Sheet>
     );

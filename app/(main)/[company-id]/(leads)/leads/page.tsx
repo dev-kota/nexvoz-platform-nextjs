@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -8,12 +8,25 @@ import { Plus, Search, SlidersHorizontal } from "lucide-react";
 import AdvancedSearch from "../this/components/advanced-search";
 import SubHeader from "@/app/(main)/this/components/sub-header";
 import LeadGroupListSheet from "../this/components/lead-group-list/sheet";
+import LeadGroupList from "../this/components/lead-group-list";
 
 export default function LeadDataPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [openLeadGroups, setOpenLeadGroups] = useState(false);
     const [advancedSearchQuery, setAdvancedSearchQuery] = useState("");
     const [openAdvancedSearch, setOpenAdvancedSearch] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsMobile(window.innerWidth < 1024); // lg breakpoint
+        };
+
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+        
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
 
     const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
@@ -67,31 +80,50 @@ export default function LeadDataPage() {
                     </div>
                 </SubHeader>
 
-                <main className="flex-1 p-6 overflow-auto">
-                    <div className="rounded-lg border">
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Name</TableHead>
-                                    <TableHead>Phone</TableHead>
-                                    <TableHead>Email</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead>Group</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {/* Add table rows here when data is available */}
-                            </TableBody>
-                        </Table>
-                    </div>
-                </main>
+                <div className="flex-1 flex">
+                    <main className="flex-1 p-6 overflow-auto">
+                        <div className="rounded-lg border">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Name</TableHead>
+                                        <TableHead>Phone</TableHead>
+                                        <TableHead>Email</TableHead>
+                                        <TableHead>Status</TableHead>
+                                        <TableHead>Group</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {/* Add table rows here when data is available */}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </main>
+
+                    {!isMobile && (
+                        <aside className="w-80 border-l p-6 overflow-y-auto">
+                            <LeadGroupList />
+                        </aside>
+                    )}
+                </div>
             </div>
 
-            <Button className="fixed bottom-4 right-4" onClick={handleOpenLeadGroups}>Open Lead Groups</Button>
+            {isMobile && (
+                <Button className="fixed bottom-4 right-4" onClick={handleOpenLeadGroups}>
+                    Open Lead Groups
+                </Button>
+            )}
 
-            <LeadGroupListSheet open={openLeadGroups} onOpenChange={setOpenLeadGroups} />
+            {isMobile && (
+                <LeadGroupListSheet open={openLeadGroups} onOpenChange={setOpenLeadGroups} />
+            )}
 
-            <AdvancedSearch open={openAdvancedSearch} onOpenChange={setOpenAdvancedSearch} searchQuery={advancedSearchQuery} onSearchChange={handleAdvancedSearchChange} />
+            <AdvancedSearch 
+                open={openAdvancedSearch} 
+                onOpenChange={setOpenAdvancedSearch} 
+                searchQuery={advancedSearchQuery} 
+                onSearchChange={handleAdvancedSearchChange} 
+            />
         </div>
     );
 }
