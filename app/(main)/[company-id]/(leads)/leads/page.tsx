@@ -1,129 +1,83 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useMemo } from "react";
+import { Plus, Search, SlidersHorizontal, Table } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Search, SlidersHorizontal } from "lucide-react";
-import AdvancedSearch from "../this/components/advanced-search";
+import { Button } from "@/components/ui/button";
+import Container from "@/app/this/components/container";
 import SubHeader from "@/app/(main)/this/components/sub-header";
-import LeadGroupListSheet from "../this/components/lead-group-list/sheet";
-import LeadGroupList from "../this/components/lead-group-list";
+import OperationContainer, { OperationButton } from "@/app/(main)/this/components/operation-container";
+import { teamMembers } from "@/app/this/constants/garbage";
+import { TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-export default function LeadDataPage() {
+
+export default function TeamPage() {
     const [searchQuery, setSearchQuery] = useState("");
-    const [openLeadGroups, setOpenLeadGroups] = useState(false);
-    const [advancedSearchQuery, setAdvancedSearchQuery] = useState("");
-    const [openAdvancedSearch, setOpenAdvancedSearch] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
 
-    useEffect(() => {
-        const checkScreenSize = () => {
-            setIsMobile(window.innerWidth < 1024); // lg breakpoint
-        };
-
-        checkScreenSize();
-        window.addEventListener('resize', checkScreenSize);
-        
-        return () => window.removeEventListener('resize', checkScreenSize);
-    }, []);
-
-    const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(e.target.value);
-    }, []);
-
-    const handleAdvancedSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        setAdvancedSearchQuery(e.target.value);
-    }, []);
-
-    const handleOpenAdvancedSearch = useCallback(() => {
-        setOpenAdvancedSearch(true);
-    }, []);
-
-    const handleOpenLeadGroups = useCallback(() => {
-        setOpenLeadGroups(true);
-    }, []);
+    // Filter team members based on search query
+    const filteredTeamMembers = useMemo(() => {
+        return teamMembers.filter((member: any) =>
+            member.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [teamMembers, searchQuery]);
 
     return (
-        <div className="h-screen flex flex-col">
-            <div className="flex-1 flex flex-col">
-                <SubHeader>
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-2">
-                            <div className="relative flex-1 max-w-[600px]">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                                <Input
-                                    className="pl-10"
-                                    type="search"
-                                    placeholder="Search leads..."
-                                    value={searchQuery}
-                                    onChange={handleSearchChange}
-                                />
-                            </div>
-
-                            <Button variant="outline" onClick={handleOpenAdvancedSearch}>
-                                <SlidersHorizontal className="h-4 w-4 mr-2" />
-                                Advanced Search
-                            </Button>
-                        </div>
-
-                        <div className="flex gap-2">
-                            <Button variant="outline" className="sm:w-auto w-full">
-                                <Plus className="h-4 w-4 mr-2" />
-                                Add Lead
-                            </Button>
-                            <Button className="sm:w-auto w-full">
-                                <Plus className="h-4 w-4 mr-2" />
-                                Import Leads
-                            </Button>
-                        </div>
+        <div className="flex flex-col">
+            <SubHeader>
+                <div className="flex items-center justify-start gap-2">
+                    <div className="relative flex-1 justify-start max-w-lg">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            placeholder="Search team members..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="pl-9"
+                        />
                     </div>
-                </SubHeader>
-
-                <div className="flex-1 flex">
-                    <main className="flex-1 p-6 overflow-auto">
-                        <div className="rounded-lg border">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Name</TableHead>
-                                        <TableHead>Phone</TableHead>
-                                        <TableHead>Email</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead>Group</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {/* Add table rows here when data is available */}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    </main>
-
-                    {!isMobile && (
-                        <aside className="w-80 border-l p-6 overflow-y-auto">
-                            <LeadGroupList />
-                        </aside>
-                    )}
+                    <div className="flex items-center gap-2 ml-auto">
+                        <Button variant="outline">
+                            <SlidersHorizontal className="h-4 w-4 md:mr-2" />
+                            <span className="hidden md:block">Filter</span>
+                        </Button>
+                    </div>
                 </div>
-            </div>
+            </SubHeader>
 
-            {isMobile && (
-                <Button className="fixed bottom-4 right-4" onClick={handleOpenLeadGroups}>
-                    Open Lead Groups
-                </Button>
-            )}
+            <Container className="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-2 md:gap-4 w-full">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Role</TableHead>
+                            <TableHead>Status</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {filteredTeamMembers.map((member) => (
+                            <TableRow key={member.id}>
+                                <TableCell className="font-medium">{member.name}</TableCell>
+                                <TableCell>{member.email}</TableCell>
+                                <TableCell>{member.role}</TableCell>
+                                <TableCell>
+                                    <span className={`px-2 py-1 text-sm rounded ${
+                                        member.status === "Active" 
+                                            ? "bg-green-100 text-green-800"
+                                            : "bg-yellow-100 text-yellow-800"
+                                    }`}>
+                                        {member.status}
+                                    </span>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </Container>
 
-            {isMobile && (
-                <LeadGroupListSheet open={openLeadGroups} onOpenChange={setOpenLeadGroups} />
-            )}
-
-            <AdvancedSearch 
-                open={openAdvancedSearch} 
-                onOpenChange={setOpenAdvancedSearch} 
-                searchQuery={advancedSearchQuery} 
-                onSearchChange={handleAdvancedSearchChange} 
-            />
+            <OperationContainer>
+                <OperationButton tooltip="Add team member" iconNode={Plus}>
+                </OperationButton>
+            </OperationContainer>
         </div>
     );
 }

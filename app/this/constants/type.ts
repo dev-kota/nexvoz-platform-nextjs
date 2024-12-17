@@ -1,3 +1,10 @@
+import { ColumnDef } from "@tanstack/react-table";
+
+export interface DataTableProps<TData, TValue> {
+    columns: ColumnDef<TData, TValue>[]
+    data: TData[]
+}
+
 export type Response = {
     status: number;
     message: string;
@@ -10,7 +17,7 @@ export type Agent = {
     avatar: string;
     language: string;
     phone: string;
-    type: AgentType;
+    type: string; // Sales, Secretary, Customer Service, Institutional, Real Estate, Feedback Collection, Custom
     totalCallTime: number;
     completedLeads: number;
     incomingCalls: number;
@@ -54,4 +61,13 @@ export type LeadStatus =
   | 'Inbound Lead'
   | 'Outbound Lead'
   | 'Churned Lead'
+
+export type TeamMember = {
+    id: number;
+    name: string;
+    email: string;
+    avatar: string;
+    role: string;
+    status: string; // Pending, Active, Inactive
+}
 
