@@ -11,6 +11,11 @@ export type Response = {
     data: any;
 }
 
+export type SortingState = {
+    field: string;
+    desc: boolean;
+}
+
 export type Agent = {
     id: number;
     name: string;
@@ -39,7 +44,7 @@ export type Lead = {
     name: string;
     phone: string;
     email: string;
-    status: LeadStatus;
+    status: string; // Marketing Qualified Lead (MQL), Sales Qualified Lead (SQL), Product Qualified Lead (PQL), Service Qualified Lead, Cold Lead, Warm Lead, Hot Lead, Referral Lead, Inbound Lead, Outbound Lead, Churned Lead
     metadata: any;
 }
 
@@ -70,4 +75,21 @@ export type TeamMember = {
     role: string;
     status: string; // Pending, Active, Inactive
 }
+
+export type Call = {
+    id: string;
+    time: string;
+    duration: number; // in seconds
+    callType: string; // Inbound, Outbound, Internal
+    cost: number; // in USD
+    agent: Agent; // agent id
+    lead: Lead; // lead id
+    from: string; // phone number
+    to: string; // phone number
+    callResult: string; // Success, Failed, No Answer, Busy, Voicemail, Other
+    callStatus: string; // Completed, Missed, Abandoned, Voicemail, Busy, No Answer, Answered, Rejected, Failed, Cancelled, Other
+    callNotes: string; // notes of the call
+    transcription: string; // transcription of the call
+}
+
 

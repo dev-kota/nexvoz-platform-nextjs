@@ -3,20 +3,10 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { TrashIcon } from "lucide-react";
-
-// Define the type for your data
-export type TeamMemberColumn = {
-    id: number;
-    name: string;
-    email: string;
-    avatar: string;
-    member: any;
-    role: string;
-    status: 'Pending' | 'Active' | 'Inactive';
-}
+import { TeamMember } from "@/app/this/constants/type";
 
 // Update columns definition to match the data type
-export default function createTeamColumns(handleRemove: (id: number) => void): ColumnDef<TeamMemberColumn>[] {
+export default function createTeamColumns(handleRemove: (id: number) => void): ColumnDef<TeamMember>[] {
     return [
         {
             accessorKey: "member",
