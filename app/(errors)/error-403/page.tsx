@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link';
 import { Ban, ArrowLeft, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -17,12 +18,11 @@ export default function Error403() {
             <div className="flex gap-4">
                 <Button
                     variant="outline"
-                    asChild
+                    onClick={() => window.history.back()}
+                    className="flex items-center gap-2"
                 >
-                    <Link href="javascript:history.back()" className="flex items-center gap-2">
-                        <ArrowLeft className="h-4 w-4" />
-                        Back
-                    </Link>
+                    <ArrowLeft className="h-4 w-4" />
+                    Back
                 </Button>
                 <Button asChild>
                     <Link href="/" className="flex items-center gap-2">
