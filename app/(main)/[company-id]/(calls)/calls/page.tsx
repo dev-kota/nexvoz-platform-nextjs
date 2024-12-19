@@ -17,7 +17,7 @@ import { calls as sample_calls } from "@/app/this/constants/garbage";
 import { Download } from "lucide-react";
 
 export default function CallsPage() {
-    const [calls, setCalls] = useState<Call[]>(sample_calls);
+    const [calls, setCalls] = useState<Call[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [pagination, setPagination] = useState({
         pageIndex: 0,

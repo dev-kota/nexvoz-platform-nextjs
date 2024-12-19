@@ -6,7 +6,8 @@ import sidebarReducer from './sidebar';
 const rootReducer = combineReducers({
   language: languageReducer,
   auth: authReducer,
-  sidebar: sidebarReducer
+  sidebar: sidebarReducer,
+  
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
