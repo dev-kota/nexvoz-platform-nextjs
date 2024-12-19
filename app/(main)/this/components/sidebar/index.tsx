@@ -59,11 +59,11 @@ import { useDeviceInfo } from "@/hooks/use-device-info";
 
 const getMenuItems = (companyId: string) => [
     { href: `/${companyId}`, icon: LayoutDashboard, label: "Dashboard" },
-    { href: `/${companyId}/agents`, icon: UserSearch, label: "Agent List" },
+    { href: `/${companyId}/agents`, icon: UserSearch, label: "Agents" },
     { href: `/${companyId}/knowledges`, icon: DatabaseZap, label: "Knowledge" },
-    { href: `/${companyId}/leads`, icon: NotebookTabs, label: "Lead Data" },
-    { href: `/${companyId}/campaigns`, icon: CalendarSync, label: "Campaign" },
-    { href: `/${companyId}/calls`, icon: PhoneCall, label: "Call Log" },
+    { href: `/${companyId}/leads`, icon: NotebookTabs, label: "Leads" },
+    { href: `/${companyId}/campaigns`, icon: CalendarSync, label: "Campaigns" },
+    { href: `/${companyId}/calls`, icon: PhoneCall, label: "Calls" },
     null, // separator
     { href: `/${companyId}/team`, icon: Users, label: "Team" },
     { href: `/${companyId}/subscription`, icon: CreditCard, label: "Subscription" },
