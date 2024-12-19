@@ -3,10 +3,17 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
-import { useSelector, useDispatch } from "react-redux";
-import { changeSidebarCollapsed } from "@/app/this/store/actions/sidebar";
+import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
+
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState } from "@/app/this/store/reducers";
+import { changeSidebarCollapsed } from "@/app/this/store/actions/sidebar";
+import { themeChange } from "@/app/this/store/actions/theme";
+
+import { cn } from "@/lib/utils";
+import { useDeviceInfo } from "@/hooks/use-device-info";
+
 import {
     ChevronDown,
     LayoutDashboard,
@@ -27,7 +34,8 @@ import {
     Laptop,
     Home,
     Menu,
-    User
+    User,
+    Palette
 } from "lucide-react";
 
 import {
@@ -48,14 +56,10 @@ import {
 } from "@/components/ui/avatar";
 
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import VisuallyHidden from "@/app/this/components/visually-hidden";
-
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-
-import type { RootState } from "@/app/this/store/reducers";
-import { usePathname } from "next/navigation";
-import { useDeviceInfo } from "@/hooks/use-device-info";
+import VisuallyHidden from "@/app/this/components/visually-hidden";
+import ThemeCustomizeDialog from "./theme-customize-dailog";
 
 const getMenuItems = (companyId: string) => [
     { href: `/${companyId}`, icon: LayoutDashboard, label: "Dashboard" },
@@ -71,25 +75,46 @@ const getMenuItems = (companyId: string) => [
 ];
 
 export default function Sidebar() {
+    // Hooks
     const dispatch = useDispatch();
     const pathname = usePathname();
-    const { theme, setTheme } = useTheme();
+    const { device } = useDeviceInfo();
+    const { setTheme } = useTheme();
+
+    // State
     const [mounted, setMounted] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [isOpenThemeDialog, setIsOpenThemeDialog] = useState(false);
+
+    // Selectors
     const isCollapsed = useSelector((state: RootState) => state.sidebar.collapsed);
     const companyId = useSelector((state: RootState) => state.auth.companyId);
-    const MENU_ITEMS = getMenuItems(companyId);
-    const { device } = useDeviceInfo();
-    const isMobile = device === "mobile";
-    const [isOpen, setIsOpen] = useState(false);
+    const { mode } = useSelector((state: RootState) => state.theme);
 
+    // Derived values
+    const isMobile = device === "mobile";
+    const MENU_ITEMS = getMenuItems(companyId);
+
+    // Effects
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    // Handlers
+    const handleModeChange = (mode: string) => {
+        dispatch(themeChange({ mode: mode }));
+        setTheme(mode);
+    };
+
+    const hanldeOpenThemeDialog = () => {
+        setIsOpenThemeDialog(true);
+    };
 
     const toggleCollapse = useCallback(() => {
         dispatch(changeSidebarCollapsed(!isCollapsed));
     }, [dispatch, isCollapsed]);
 
+    // Components
     const MenuItem = ({ href, icon: Icon, label, isCollapsed }: { href: string, icon: React.ElementType, label: string, isCollapsed: boolean }) => (
         <Link
             href={href}
@@ -129,17 +154,22 @@ export default function Sidebar() {
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                    <DropdownMenuItem onClick={() => setTheme("light")}>
+                                    <DropdownMenuItem onClick={() => handleModeChange("light")} className={cn(mode === "light" && "bg-accent")}>
                                         <Sun className="mr-2 h-4 w-4" />
                                         <span>Light</span>
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => setTheme("dark")}>
+                                    <DropdownMenuItem onClick={() => handleModeChange("dark")} className={cn(mode === "dark" && "bg-accent")}>
                                         <Moon className="mr-2 h-4 w-4" />
                                         <span>Dark</span>
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => setTheme("system")}>
+                                    <DropdownMenuItem onClick={() => handleModeChange("system")} className={cn(mode === "system" && "bg-accent")}>
                                         <Laptop className="mr-2 h-4 w-4" />
                                         <span>System</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={hanldeOpenThemeDialog}>
+                                        <Palette className="mr-2 h-4 w-4" />
+                                        <span>Customize</span>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -203,6 +233,7 @@ export default function Sidebar() {
                         </div>
                     </SheetContent>
                 </Sheet>
+                {isOpenThemeDialog && <ThemeCustomizeDialog open={isOpenThemeDialog} onOpenChange={setIsOpenThemeDialog} />}
             </>
         );
     } else {
@@ -274,23 +305,28 @@ export default function Sidebar() {
                                 <DropdownMenuSeparator />
                                 <DropdownMenuSub>
                                     <DropdownMenuSubTrigger className="cursor-pointer">
-                                        {theme === 'light' && <Sun className="h-4 w-4 mr-2" />}
-                                        {theme === 'dark' && <Moon className="h-4 w-4 mr-2" />}
-                                        {theme === 'system' && <Laptop className="h-4 w-4 mr-2" />}
+                                        {mode === 'light' && <Sun className="h-4 w-4 mr-2" />}
+                                        {mode === 'dark' && <Moon className="h-4 w-4 mr-2" />}
+                                        {mode === 'system' && <Laptop className="h-4 w-4 mr-2" />}
                                         <span>Theme</span>
                                     </DropdownMenuSubTrigger>
                                     <DropdownMenuSubContent>
-                                        <DropdownMenuItem onClick={() => setTheme("light")} className={cn("cursor-pointer", theme === "light" && "bg-accent")}>
+                                        <DropdownMenuItem onClick={() => handleModeChange("light")} className={cn("cursor-pointer", mode === "light" && "bg-accent")}>
                                             <Sun className="h-4 w-4 mr-2" />
                                             <span>Light</span>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => setTheme("dark")} className={cn("cursor-pointer", theme === "dark" && "bg-accent")}>
+                                        <DropdownMenuItem onClick={() => handleModeChange("dark")} className={cn("cursor-pointer", mode === "dark" && "bg-accent")}>
                                             <Moon className="h-4 w-4 mr-2" />
                                             <span>Dark</span>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => setTheme("system")} className={cn("cursor-pointer", theme === "system" && "bg-accent")}>
+                                        <DropdownMenuItem onClick={() => handleModeChange("system")} className={cn("cursor-pointer", mode === "system" && "bg-accent")}>
                                             <Laptop className="h-4 w-4 mr-2" />
                                             <span>System</span>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem onClick={hanldeOpenThemeDialog}>
+                                            <Palette className="h-4 w-4 mr-2" />
+                                            <span>Customize</span>
                                         </DropdownMenuItem>
                                     </DropdownMenuSubContent>
                                 </DropdownMenuSub>
@@ -316,6 +352,8 @@ export default function Sidebar() {
                         isCollapsed ? "rotate-180" : ""
                     )} />
                 </button>
+
+                {isOpenThemeDialog && <ThemeCustomizeDialog open={isOpenThemeDialog} onOpenChange={setIsOpenThemeDialog} />}
             </div>
         );
     }
