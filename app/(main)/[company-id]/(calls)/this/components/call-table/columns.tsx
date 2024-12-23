@@ -134,18 +134,18 @@ export default function createCallColumns(
                             <EyeIcon className="w-4 h-4" />
                         </Button>
                         <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => handleDelete(row.original.id)}
-                        >
-                            <TrashIcon className="w-4 h-4" />
-                        </Button>
-                        <Button
                             variant="outline"
                             size="sm"
                             onClick={() => handleExport(row.original)}
                         >
                             <DownloadIcon className="w-4 h-4" />
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleDelete(row.original.id)}
+                        >
+                            <TrashIcon className="w-4 h-4" />
                         </Button>
                     </div>
                 )

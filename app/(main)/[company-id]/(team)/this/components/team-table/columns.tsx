@@ -13,7 +13,7 @@ export default function createTeamColumns(handleRemove: (id: number) => void): C
             header: "Team Member",
             cell: ({ row }) => {
                 return (
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap2 md:gap-4">
                         <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-medium">
                             {row.original.name[0]}
                         </div>
@@ -50,6 +50,13 @@ export default function createTeamColumns(handleRemove: (id: number) => void): C
                         {row.original.status}
                     </div>
                 )
+            }
+        },
+        {
+            accessorKey: "employedAt",
+            header: "Employed At",
+            cell: ({ row }) => {
+                return new Date(row.original.employedAt).toLocaleString()
             }
         },
         {

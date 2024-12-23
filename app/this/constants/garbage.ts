@@ -200,7 +200,7 @@ export const leadGroups = [
 ]
 
 
-export const leads = Array.from({ length: 1000 }, (_, i) => {
+export const leads = Array.from({ length: 40 }, (_, i) => {
     const statuses = [
         "Marketing Qualified Lead (MQL)",
         "Sales Qualified Lead (SQL)",
@@ -240,479 +240,150 @@ export const leads = Array.from({ length: 1000 }, (_, i) => {
 
     const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 1000)}@example.com`;
 
+    const createdAt = new Date(Date.now() - Math.random() * 31536000000).toISOString();
+
     return {
         id: (i + 1).toString(),
         name,
         phone,
         email,
-        status: statuses[Math.floor(Math.random() * statuses.length)],
         groupId: groupIds[Math.floor(Math.random() * groupIds.length)],
         metadata: {
+            status: statuses[Math.floor(Math.random() * statuses.length)],
             lastContact: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString(),
             source: ["Website", "Referral", "Trade Show", "Cold Call", "Social Media"][Math.floor(Math.random() * 5)],
             priority: ["High", "Medium", "Low"][Math.floor(Math.random() * 3)]
-        }
+        },
+        createdAt
     };
 })
 
 
-export const teamMembers = [
-    { id: 1, name: "John Doe", email: "john.doe@example.com", role: "Admin", status: "Active", avatar: "/images/agents/agent-male-1.jpg" },
-    { id: 2, name: "Jane Smith", email: "jane.smith@example.com", role: "Agent", status: "Active", avatar: "/images/agents/agent-female-1.jpg" },
-    { id: 3, name: "Alice Johnson", email: "alice.johnson@example.com", role: "Agent", status: "Active", avatar: "/images/agents/agent-female-2.jpg" },
-    { id: 4, name: "Bob Brown", email: "bob.brown@example.com", role: "Agent", status: "Pending", avatar: "/images/agents/agent-male-2.jpg" }
-]
+export const teamMembers = Array.from({ length: 4 }, (_, i) => {
+    const members = [
+        { name: "John Doe", email: "john.doe@example.com", role: "Admin", avatar: "/images/agents/agent-male-1.jpg" },
+        { name: "Jane Smith", email: "jane.smith@example.com", role: "Agent", avatar: "/images/agents/agent-female-1.jpg" },
+        { name: "Alice Johnson", email: "alice.johnson@example.com", role: "Agent", avatar: "/images/agents/agent-female-2.jpg" },
+        { name: "Bob Brown", email: "bob.brown@example.com", role: "Agent", avatar: "/images/agents/agent-male-2.jpg" }
+    ];
+
+    return {
+        id: i + 1,
+        name: members[i].name,
+        email: members[i].email,
+        role: members[i].role,
+        status: i === 3 ? "Pending" : "Active",
+        employedAt: new Date(Date.now() - Math.random() * 31536000000).toISOString(),
+        avatar: members[i].avatar
+    };
+});
 
 
-export const calls = [
-    {
-        id: "1",
-        time: "2024-11-15T14:30:00.000Z",
-        duration: 251,
-        callType: "Inbound",
-        cost: 45,
-        agent: agents[0],
-        lead: leads[0], 
-        from: "+14155552671",
-        to: "+14155557890",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Customer inquired about premium features",
-        transcription: "Hi, I'm interested in learning more about your premium plan features..."
-    },
-    {
-        id: "2", 
-        time: "2024-11-15T15:45:00.000Z",
-        duration: 180,
-        callType: "Outbound",
-        cost: 35,
-        agent: agents[1],
-        lead: leads[1],
-        from: "+14155553456", 
-        to: "+14155559012",
-        callResult: "Success",
-        callStatus: "Completed", 
-        callNotes: "Follow up on previous inquiry",
-        transcription: "Following up regarding your interest in our services..."
-    },
-    {
-        id: "3",
-        time: "2024-11-15T16:15:00.000Z", 
-        duration: 120,
-        callType: "Internal",
-        cost: 25,
-        agent: agents[2],
-        lead: leads[2],
-        from: "+14155554567",
-        to: "+14155558901",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Internal team sync",
-        transcription: "Team discussion about new feature rollout..."
-    },
-    {
-        id: "4",
-        time: "2024-11-15T17:00:00.000Z",
-        duration: 300,
-        callType: "Inbound",
-        cost: 55,
-        agent: agents[0],
-        lead: leads[3],
-        from: "+14155555678",
-        to: "+14155557123",
-        callResult: "Success", 
-        callStatus: "Completed",
-        callNotes: "Technical support call",
-        transcription: "Customer needed help with account settings..."
-    },
-    {
-        id: "5",
-        time: "2024-11-16T09:30:00.000Z",
-        duration: 150,
-        callType: "Outbound",
-        cost: 30,
-        agent: agents[1],
-        lead: leads[4],
-        from: "+14155556789",
-        to: "+14155556234",
-        callResult: "No Answer",
-        callStatus: "Missed",
-        callNotes: "No response from customer",
-        transcription: "No transcription available"
-    },
-    {
-        id: "6",
-        time: "2024-11-16T10:45:00.000Z",
-        duration: 240,
-        callType: "Inbound",
-        cost: 48,
-        agent: agents[2],
-        lead: leads[5],
-        from: "+14155557890",
-        to: "+14155555345",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Product demo request",
-        transcription: "Customer requested a detailed demo of the platform..."
-    },
-    {
-        id: "7",
-        time: "2024-11-16T11:30:00.000Z",
-        duration: 180,
-        callType: "Outbound",
-        cost: 36,
-        agent: agents[0],
-        lead: leads[6],
-        from: "+14155558901",
-        to: "+14155554456",
-        callResult: "Voicemail",
-        callStatus: "Voicemail",
-        callNotes: "Left voicemail for callback",
-        transcription: "Hi, this is regarding your recent inquiry..."
-    },
-    {
-        id: "8",
-        time: "2024-11-16T13:15:00.000Z",
-        duration: 360,
-        callType: "Inbound",
-        cost: 65,
-        agent: agents[1],
-        lead: leads[7],
-        from: "+14155559012",
-        to: "+14155553567",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Complex technical issue resolved",
-        transcription: "Customer reported issues with integration..."
-    },
-    {
-        id: "9",
-        time: "2024-11-16T14:45:00.000Z",
-        duration: 420,
-        callType: "Internal",
-        cost: 75,
-        agent: agents[2],
-        lead: leads[8],
-        from: "+14155551234",
-        to: "+14155552678",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Team training session",
-        transcription: "Training session on new product features..."
-    },
-    {
-        id: "10",
-        time: "2024-11-16T16:00:00.000Z",
-        duration: 195,
-        callType: "Outbound",
-        cost: 39,
-        agent: agents[0],
-        lead: leads[9],
-        from: "+14155552345",
-        to: "+14155551789",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Sales follow-up",
-        transcription: "Discussion about pricing options..."
-    },
-    {
-        id: "11",
-        time: "2024-11-17T09:00:00.000Z",
-        duration: 275,
-        callType: "Inbound",
-        cost: 52,
-        agent: agents[1],
-        lead: leads[10],
-        from: "+14155553456",
-        to: "+14155550890",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "New customer onboarding",
-        transcription: "Walked through initial setup process..."
-    },
-    {
-        id: "12",
-        time: "2024-11-17T10:30:00.000Z",
-        duration: 165,
-        callType: "Outbound",
-        cost: 33,
-        agent: agents[2],
-        lead: leads[11],
-        from: "+14155554567",
-        to: "+14155559901",
-        callResult: "Busy",
-        callStatus: "Busy",
-        callNotes: "Customer unavailable",
-        transcription: "No transcription available"
-    },
-    {
-        id: "13",
-        time: "2024-11-17T11:45:00.000Z",
-        duration: 330,
-        callType: "Inbound",
-        cost: 60,
-        agent: agents[0],
-        lead: leads[12],
-        from: "+14155555678",
-        to: "+14155558012",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Feature consultation",
-        transcription: "Detailed discussion about advanced features..."
-    },
-    {
-        id: "14",
-        time: "2024-11-17T13:30:00.000Z",
-        duration: 225,
-        callType: "Internal",
-        cost: 42,
-        agent: agents[1],
-        lead: leads[13],
-        from: "+14155556789",
-        to: "+14155557123",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Weekly team sync",
-        transcription: "Team updates and project planning..."
-    },
-    {
-        id: "15",
-        time: "2024-11-17T15:00:00.000Z",
-        duration: 285,
-        callType: "Outbound",
-        cost: 54,
-        agent: agents[2],
-        lead: leads[14],
-        from: "+14155557890",
-        to: "+14155556234",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Contract renewal discussion",
-        transcription: "Reviewed renewal terms and options..."
-    },
-    {
-        id: "16",
-        time: "2024-11-18T09:15:00.000Z",
-        duration: 210,
-        callType: "Inbound",
-        cost: 40,
-        agent: agents[0],
-        lead: leads[15],
-        from: "+14155558901",
-        to: "+14155555345",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Billing inquiry resolved",
-        transcription: "Addressed questions about recent charges..."
-    },
-    {
-        id: "17",
-        time: "2024-11-18T10:45:00.000Z",
-        duration: 345,
-        callType: "Outbound",
-        cost: 63,
-        agent: agents[1],
-        lead: leads[16],
-        from: "+14155559012",
-        to: "+14155554456",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Product demo",
-        transcription: "Comprehensive product demonstration..."
-    },
-    {
-        id: "18",
-        time: "2024-11-18T12:15:00.000Z",
-        duration: 195,
-        callType: "Internal",
-        cost: 38,
-        agent: agents[2],
-        lead: leads[17],
-        from: "+14155551234",
-        to: "+14155553567",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Strategy meeting",
-        transcription: "Discussion about market expansion..."
-    },
-    {
-        id: "19",
-        time: "2024-11-18T14:00:00.000Z",
-        duration: 270,
-        callType: "Inbound",
-        cost: 51,
-        agent: agents[0],
-        lead: leads[18],
-        from: "+14155552345",
-        to: "+14155552678",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Support ticket resolution",
-        transcription: "Troubleshooting technical issues..."
-    },
-    {
-        id: "20",
-        time: "2024-11-18T15:30:00.000Z",
-        duration: 180,
-        callType: "Outbound",
-        cost: 35,
-        agent: agents[1],
-        lead: leads[19],
-        from: "+14155553456",
-        to: "+14155551789",
-        callResult: "No Answer",
-        callStatus: "No Answer",
-        callNotes: "Follow-up attempted",
-        transcription: "No transcription available"
-    },
-    {
-        id: "21",
-        time: "2024-11-19T09:45:00.000Z",
-        duration: 315,
-        callType: "Inbound",
-        cost: 58,
-        agent: agents[2],
-        lead: leads[20],
-        from: "+14155554567",
-        to: "+14155550890",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Integration support",
-        transcription: "Assisted with API integration setup..."
-    },
-    {
-        id: "22",
-        time: "2024-11-19T11:15:00.000Z",
-        duration: 240,
-        callType: "Internal",
-        cost: 45,
-        agent: agents[0],
-        lead: leads[21],
-        from: "+14155555678",
-        to: "+14155559901",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Product roadmap review",
-        transcription: "Team discussion about upcoming features..."
-    },
-    {
-        id: "23",
-        time: "2024-11-19T13:00:00.000Z",
-        duration: 225,
-        callType: "Outbound",
-        cost: 43,
-        agent: agents[1],
-        lead: leads[22],
-        from: "+14155556789",
-        to: "+14155558012",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Quarterly review",
-        transcription: "Review of account performance..."
-    },
-    {
-        id: "24",
-        time: "2024-11-19T14:30:00.000Z",
-        duration: 390,
-        callType: "Inbound",
-        cost: 70,
-        agent: agents[2],
-        lead: leads[23],
-        from: "+14155557890",
-        to: "+14155557123",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Complex issue resolution",
-        transcription: "Detailed troubleshooting session..."
-    },
-    {
-        id: "25",
-        time: "2024-11-19T16:15:00.000Z",
-        duration: 165,
-        callType: "Outbound",
-        cost: 32,
-        agent: agents[0],
-        lead: leads[24],
-        from: "+14155558901",
-        to: "+14155556234",
-        callResult: "Voicemail",
-        callStatus: "Voicemail",
-        callNotes: "Left detailed message",
-        transcription: "Voicemail regarding account updates..."
-    },
-    {
-        id: "26",
-        time: "2024-11-20T09:30:00.000Z",
-        duration: 300,
-        callType: "Inbound",
-        cost: 56,
-        agent: agents[1],
-        lead: leads[25],
-        from: "+14155559012",
-        to: "+14155555345",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "New feature training",
-        transcription: "Walkthrough of new platform features..."
-    },
-    {
-        id: "27",
-        time: "2024-11-20T11:00:00.000Z",
-        duration: 255,
-        callType: "Internal",
-        cost: 48,
-        agent: agents[2],
-        lead: leads[26],
-        from: "+14155551234",
-        to: "+14155554456",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Team performance review",
-        transcription: "Discussion about team metrics..."
-    },
-    {
-        id: "28",
-        time: "2024-11-20T13:15:00.000Z",
-        duration: 210,
-        callType: "Outbound",
-        cost: 41,
-        agent: agents[0],
-        lead: leads[27],
-        from: "+14155552345",
-        to: "+14155553567",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Follow-up call",
-        transcription: "Discussion about implementation timeline..."
-    },
-    {
-        id: "29",
-        time: "2024-11-20T14:45:00.000Z",
-        duration: 345,
-        callType: "Inbound",
-        cost: 62,
-        agent: agents[1],
-        lead: leads[28],
-        from: "+14155553456",
-        to: "+14155552678",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Enterprise solution discussion",
-        transcription: "Detailed review of enterprise features..."
-    },
-    {
-        id: "30",
-        time: "2024-11-20T16:30:00.000Z",
-        duration: 270,
-        callType: "Outbound",
-        cost: 50,
-        agent: agents[2],
-        lead: leads[29],
-        from: "+14155554567",
-        to: "+14155551789",
-        callResult: "Success",
-        callStatus: "Completed",
-        callNotes: "Contract finalization",
-        transcription: "Final review of contract terms..."
-    }
-]
+export const calls = Array.from({ length: 30 }, (_, i) => {
+    const callTypes = ["Inbound", "Outbound", "Internal"];
+    const results = ["Success", "Failed", "No Answer", "Busy", "Voicemail"];
+    const statuses = ["Completed", "Missed", "Abandoned", "Voicemail", "Busy", "No Answer"];
+    
+    // Generate time between Nov 15-20, 2024
+    const startDate = new Date('2024-11-15').getTime();
+    const endDate = new Date('2024-11-20').getTime();
+    const randomTime = new Date(startDate + Math.random() * (endDate - startDate));
+    
+    const callType = callTypes[Math.floor(Math.random() * callTypes.length)];
+    const duration = Math.floor(Math.random() * 300) + 120; // 120-420 seconds
+    const cost = Math.floor(duration * 0.2); // Roughly cost based on duration
+    
+    const result = results[Math.floor(Math.random() * results.length)];
+    const status = result === "Success" ? "Completed" : 
+                  result === "Voicemail" ? "Voicemail" :
+                  result === "Busy" ? "Busy" :
+                  result === "No Answer" ? "No Answer" : "Missed";
+
+    // Generate phone numbers
+    const areaCode = Math.floor(Math.random() * 800) + 200;
+    const prefix = Math.floor(Math.random() * 900) + 100;
+    const lineNum = Math.floor(Math.random() * 9000) + 1000;
+    const from = `+1${areaCode}${prefix}${lineNum}`;
+    const to = `+1${Math.floor(Math.random() * 800) + 200}${Math.floor(Math.random() * 900) + 100}${Math.floor(Math.random() * 9000) + 1000}`;
+
+    const agentIndex = i % 3;
+    const leadIndex = i % leads.length;
+
+    const transcriptions = [
+        "Discussion about pricing options...",
+        "Walked through initial setup process...",
+        "Detailed discussion about advanced features...",
+        "Team updates and project planning...",
+        "Reviewed renewal terms and options...",
+        "No transcription available"
+    ];
+
+    const notes = [
+        "Sales follow-up",
+        "New customer onboarding",
+        "Feature consultation",
+        "Weekly team sync",
+        "Contract renewal discussion",
+        "Technical support call"
+    ];
+
+    return {
+        id: (i + 1).toString(),
+        time: randomTime.toISOString(),
+        duration,
+        callType,
+        cost,
+        agent: agents[agentIndex],
+        lead: leads[leadIndex],
+        from,
+        to,
+        callResult: result,
+        callStatus: status,
+        callNotes: notes[Math.floor(Math.random() * notes.length)],
+        transcription: status === "Completed" ? 
+            transcriptions[Math.floor(Math.random() * (transcriptions.length - 1))] : 
+            transcriptions[transcriptions.length - 1]
+    };
+});
+
+export const knowledges = Array.from({ length: 40 }, (_, i) => {
+    const types = ["PDF", "AUDIO", "VIDEO", "TEXT"];
+    const names = [
+        "Sales Guide",
+        "Product Manual",
+        "Training Video",
+        "Customer FAQ",
+        "Technical Documentation",
+        "Onboarding Guide",
+        "Best Practices",
+        "Troubleshooting Guide",
+        "Feature Overview",
+        "Integration Guide"
+    ];
+    const descriptions = [
+        "Comprehensive sales guide for our product",
+        "Detailed product manual and specifications",
+        "Video training materials for new users",
+        "Frequently asked questions and answers",
+        "Technical documentation and API references",
+        "Step-by-step onboarding instructions",
+        "Best practices and usage guidelines",
+        "Common issues and troubleshooting steps",
+        "Overview of product features and capabilities",
+        "Guide for integrating with other systems"
+    ];
+
+    const type = types[Math.floor(Math.random() * types.length)];
+    const nameIndex = i % names.length;
+    const fileExt = type.toLowerCase();
+    
+    return {
+        id: (i + 1).toString(),
+        name: names[nameIndex],
+        description: descriptions[nameIndex],
+        type,
+        url: `/knowledge/${names[nameIndex].toLowerCase().replace(/\s+/g, '-')}.${fileExt}`,
+        size: Math.floor(Math.random() * 5000000) + 50000, // Random size between 50KB and 5MB
+        createdAt: new Date(Date.now() - Math.floor(Math.random() * 31536000000)).toISOString() // Random date within last year
+    };
+});

@@ -44,14 +44,15 @@ export type Lead = {
     name: string;
     phone: string;
     email: string;
-    status: string; // Marketing Qualified Lead (MQL), Sales Qualified Lead (SQL), Product Qualified Lead (PQL), Service Qualified Lead, Cold Lead, Warm Lead, Hot Lead, Referral Lead, Inbound Lead, Outbound Lead, Churned Lead
     metadata: any;
+    createdAt: string;
 }
 
 export type LeadGroup = {
     id: string;
     name: string;
     description: string;
+    createdAt: string;
 }
 
 export type LeadStatus =
@@ -74,6 +75,7 @@ export type TeamMember = {
     avatar: string;
     role: string;
     status: string; // Pending, Active, Inactive
+    employedAt: string;
 }
 
 export type Call = {
@@ -93,3 +95,12 @@ export type Call = {
 }
 
 
+export type Knowledge = {
+    id: string;
+    name: string;
+    description: string;
+    type: string; // PDF, AUDIO, VIDEO, TEXT
+    url: string;
+    size: number; // in bytes
+    createdAt: string;
+}

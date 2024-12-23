@@ -1,71 +1,59 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { teamMembers as sample_teamMembers } from "@/app/this/constants/garbage";
-import { UserPlus, Search, SlidersHorizontal } from "lucide-react";
+import { Search, SlidersHorizontal, Upload } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { TeamTable } from "../this/components/team-table";
-import createTeamColumns from "../this/components/team-table/columns";
+import { KnowledgeTable } from "../this/components/knowledge-table";
+import createKnowledgeColumns from "../this/components/knowledge-table/columns";
 import SubHeader from "@/app/(main)/this/components/sub-header";
 import Container from "@/app/this/components/container";
 import { Button } from "@/components/ui/button";
-import { useReactTable, getCoreRowModel, Table as TableType } from "@tanstack/react-table";
+import { useReactTable, getCoreRowModel } from "@tanstack/react-table";
 import { DataTableViewOptions } from "@/app/this/components/table/datatable-view";
-import { TeamMember } from "@/app/this/constants/type";
 import OperationContainer, { OperationButton } from "@/app/(main)/this/components/operation-container";
-import InviteDialog from "../this/components/invite-dialog.tsx";
 import { DataTablePagination } from "@/app/this/components/table/datatable-pagination";
+import { Knowledge } from "@/app/this/constants/type";
+import { knowledges as sample_knowledges } from "@/app/this/constants/garbage";
+import { Download } from "lucide-react";
 
-
-export default function TeamPage() {
+export default function KnowledgePage() {
+    const [knowledges, setKnowledges] = useState<Knowledge[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-    const [openInviteDialog, setOpenInviteDialog] = useState(false);
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 10,
-        total: 127
+        total: 245
     });
 
-    // Filter team members based on search query
+    // Filter knowledges based on search query
     useEffect(() => {
-        const filteredTeamMembers = sample_teamMembers.filter(member =>
-            member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            member.email.toLowerCase().includes(searchQuery.toLowerCase())
+        const filteredKnowledges = sample_knowledges.filter(knowledge =>
+            knowledge.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            knowledge.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            knowledge.size.toString().includes(searchQuery) ||
+            new Date(knowledge.createdAt).toLocaleString().toLowerCase().includes(searchQuery.toLowerCase())
         );
-        setTeamMembers(filteredTeamMembers);
+        setKnowledges(filteredKnowledges);
     }, [searchQuery, pagination]);
 
-    const handleRemove = (id: number) => {
-        const newTeamMembers = teamMembers.filter(member => member.id !== id);
-        setTeamMembers(newTeamMembers);
+    const handleView = (knowledge: Knowledge) => {
+        console.log(knowledge);
     }
 
-    const handleOpenInviteDialog = () => {
-        setOpenInviteDialog(true);
+    const handleDelete = (id: string) => {
+        console.log(id);
     }
 
-    const handleAddTeamMember = (email: string) => {
-        console.log("add team member");
-        const newTeamMember = {
-            id: teamMembers.length + 1,
-            name: "New Team Member",
-            email: email,
-            avatar: "/images/agents/agent-male-1.jpg",
-            role: "Agent",
-            status: "Pending",
-        };
-        setTeamMembers([...teamMembers, newTeamMember]);
+    const handleExport = (knowledge: Knowledge) => {
+        console.log(knowledge);
     }
-
 
     const table = useReactTable({
-        data: teamMembers,
-        columns: createTeamColumns(handleRemove),
+        data: knowledges,
+        columns: createKnowledgeColumns(handleView, handleDelete, handleExport),
         getCoreRowModel: getCoreRowModel(),
+        initialState: {}, // Add empty initial state to avoid hydration warning
     });
-
-    
 
     return (
         <div className="flex flex-col">
@@ -74,14 +62,14 @@ export default function TeamPage() {
                     <div className="relative flex-1 justify-start max-w-lg">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                            placeholder="Search team members..."
+                            placeholder="Search knowledge..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="pl-9"
                         />
                     </div>
                     <div className="flex items-center gap-2 ml-auto">
-                        <DataTableViewOptions table={table} >
+                        <DataTableViewOptions table={table}>
                             <Button variant="outline">
                                 <SlidersHorizontal className="h-4 w-4 md:mr-2" />
                                 <span className="hidden md:block">Filter</span>
@@ -93,18 +81,14 @@ export default function TeamPage() {
 
             <Container>
                 <div className="flex flex-col gap-2 md:gap-4">
-                    <TeamTable
-                        table={table}
-                    />
+                    <KnowledgeTable table={table} />
                     <DataTablePagination pagination={pagination} setPagination={setPagination} />
                 </div>
             </Container>
 
             <OperationContainer>
-                <OperationButton tooltip="Add team member" iconNode={UserPlus} onClick={handleOpenInviteDialog} />
+                <OperationButton iconNode={Upload} tooltip="Upload" />
             </OperationContainer>
-
-            {openInviteDialog && <InviteDialog open={openInviteDialog} onOpenChange={setOpenInviteDialog} handleAddTeamMember={handleAddTeamMember} />}
         </div>
     );
 }
